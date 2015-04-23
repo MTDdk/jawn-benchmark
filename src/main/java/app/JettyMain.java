@@ -30,7 +30,7 @@ public class JettyMain {
         
         contextHandler.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false"); //disables directory listing
         contextHandler.setContextPath("/");
-        contextHandler.setBaseResource(Resource.newResource("webapp"));//src/main/
+        contextHandler.setBaseResource(Resource.newResource("src/main/webapp"));
         contextHandler.setParentLoaderPriority(true);
         contextHandler.configure();
         

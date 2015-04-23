@@ -5,9 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.javapla.jawn.core.db.DatabaseConnections.DatabaseConnection;
 import net.javapla.jawn.core.exceptions.InitException;
+import app.models.Fortune;
 import app.models.World;
 
 import com.google.inject.Inject;
@@ -18,7 +21,8 @@ public class DbManager {
 
 
     private final Connection conn;
-//    private final PreparedStatement retrieveWorld;
+    private final PreparedStatement retrieveWorld;
+    private final PreparedStatement retrieveFortune;
 
     @Inject
     public DbManager(DatabaseConnection spec) throws ClassNotFoundException, SQLException {
@@ -27,20 +31,30 @@ public class DbManager {
         Class.forName(spec.driver());
         conn = DriverManager.getConnection(spec.url(), spec.user(), spec.password());
         
-//        retrieveWorld = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
+        retrieveWorld   = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
+        retrieveFortune = conn.prepareStatement("SELECT id, message FROM Fortune");
     }
     
-    public World getWorld(int id) {
+    public synchronized World getWorld(int id) {
         try {
-            PreparedStatement st = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
-            
-            st.setInt(1, id);
-//            retrieveWorld.setInt(1, id);
-            try (ResultSet set = st.executeQuery()) {
+            retrieveWorld.setInt(1, id);
+            try (ResultSet set = retrieveWorld.executeQuery()) {
                 if (!set.next()) return null;
                 
                 return new World(set.getInt(1), set.getInt(2));
             }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+    
+    public List<Fortune> fetchAllFortunes() {
+        try (ResultSet set = retrieveFortune.executeQuery()) {
+            List<Fortune> list = new ArrayList<>();
+            while (set.next()) {
+                list.add(new Fortune(set.getInt(1), set.getString(2)));
+            }
+            return list;
         } catch (SQLException e) {
             return null;
         }
