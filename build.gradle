@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+// compiler options
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+mainClassName = 'app.JettyMain'
+
+repositories {
+    mavenCentral()
+    
+    //snapshot repository
+    maven {
+        url 'http://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+dependencies {
+	compile 'net.javapla.jawn:jawn:0.8.0-SNAPSHOT'
+
+	compile 'org.eclipse.jetty:jetty-server:9.2.+'
+	compile 'org.eclipse.jetty:jetty-servlet:9.2.+'
+	compile 'org.eclipse.jetty:jetty-webapp:9.2.+'	
+    
+	//Logging 
+	//compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2' exclude group: 'org.slf4j'
+	
+	// it is a known bug, that Gradle includes SLF4J somewhat 
+	// incorrectly in the classpath, but we just have to ignore that
+}
+
+
+/* ****************** */
+/*    Eclipse         */
+/* ****************** */
+eclipse {
+	classpath {
+		// we need the output dir to be the same as the one gradle uses when running Jetty
+		// or else the dynamic loading does not apply
+		defaultOutputDir = file('build/classes/main')
+	}
+}

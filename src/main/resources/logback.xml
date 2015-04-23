@@ -1,0 +1,6 @@
+<configuration>
+    
+    <!-- Disables all logging -->
+    <root level="OFF"></root>
+
+</configuration>
