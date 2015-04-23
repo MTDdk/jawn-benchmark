@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-	compile 'net.javapla.jawn:jawn:0.8.0-SNAPSHOT'
+	compile 'net.javapla.jawn:jawn:0.8.2-SNAPSHOT'
 
 	compile 'org.eclipse.jetty:jetty-server:9.2.+'
 	compile 'org.eclipse.jetty:jetty-servlet:9.2.+'
