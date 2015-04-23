@@ -1,0 +1,13 @@
+./jawn-standalone/src/
+./jawn-standalone/src/main/
+./jawn-standalone/src/main/java/
+./jawn-standalone/src/main/java/app
+./jawn-standalone/src/main/java/app/config
+./jawn-standalone/src/main/java/app/config/Routing.java
+./jawn-standalone/src/main/java/app/controllers
+./jawn-standalone/src/main/java/app/controllers/IndexController.java
+./jawn-standalone/src/main/java/app/models
+./jawn-standalone/src/main/java/app/models/Message.java
+./jawn-standalone/src/main/java/app/JettyMain.java
+./jawn-standalone/src/main/resources/
+./jawn-standalone/src/main/resources/logback.xml
