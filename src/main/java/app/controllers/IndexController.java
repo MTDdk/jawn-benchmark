@@ -8,4 +8,8 @@ public class IndexController extends AppController {
     public void getBenchmark() {
         respond().json(new Message("Hello, World!"));
     }
+    
+    public void getPlaintext() {
+        respond().text("Hello, World!");
+    }
 }

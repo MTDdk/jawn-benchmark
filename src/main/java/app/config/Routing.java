@@ -10,6 +10,7 @@ public class Routing implements ApplicationRoutes {
     @Override
     public void router(Router router) {
         router.GET().route("/json").to(IndexController.class, "benchmark");
+        router.GET().route("/plaintext").to(IndexController.class, "plaintext");
     }
 
 }
