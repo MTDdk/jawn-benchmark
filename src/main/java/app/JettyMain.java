@@ -16,7 +16,9 @@ public class JettyMain {
     public static final int PORT = 8080;
 
     public static void main(String[] args) throws Exception {
-        System.setProperty("JAWN_ENV", "production");
+        String environment = "production";
+        if (args.length > 0) environment = args[0];
+        System.setProperty("JAWN_ENV", environment);
         start();
     }
     

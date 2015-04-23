@@ -32,6 +32,14 @@ public class Database implements ApplicationDatabaseBootstrap {
             .url("jdbc:mysql://localhost/hello_world?" + jdbcParams)
             .user("benchmarkdbuser")
             .password("benchmarkdbpass");
+        
+        connections
+            .environment(Modes.dev)
+            .jdbc()
+            .driver("com.mysql.jdbc.Driver")
+            .url("jdbc:mysql://192.168.100.11/hello_world?" + jdbcParams)
+            .user("benchmarkdbuser")
+            .password("benchmarkdbpass");
     }
 
 }
