@@ -18,7 +18,7 @@ public class DbManager {
 
 
     private final Connection conn;
-    private final PreparedStatement retrieveWorld;
+//    private final PreparedStatement retrieveWorld;
 
     @Inject
     public DbManager(DatabaseConnection spec) throws ClassNotFoundException, SQLException {
@@ -27,13 +27,16 @@ public class DbManager {
         Class.forName(spec.driver());
         conn = DriverManager.getConnection(spec.url(), spec.user(), spec.password());
         
-        retrieveWorld = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
+//        retrieveWorld = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
     }
     
     public synchronized World getWorld(int id) {
         try {
-            retrieveWorld.setInt(1, id);
-            try (ResultSet set = retrieveWorld.executeQuery()) {
+            PreparedStatement st = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
+            
+            st.setInt(1, id);
+//            retrieveWorld.setInt(1, id);
+            try (ResultSet set = st.executeQuery()) {
                 if (!set.next()) return null;
                 
                 return new World(set.getInt(1), set.getInt(2));
