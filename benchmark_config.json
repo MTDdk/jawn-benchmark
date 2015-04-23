@@ -12,7 +12,7 @@
       "database": "MySQL",
       "framework": "jawn",
       "language": "Java",
-      "orm": "Micro",
+      "orm": "Raw",
       "platform": "Jetty",
       "webserver": "Jetty",
       "os": "Linux",

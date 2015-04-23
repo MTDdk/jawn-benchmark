@@ -1,7 +1,10 @@
 package app;
 
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import net.javapla.jawn.core.db.DatabaseConnections.DatabaseConnection;
 import net.javapla.jawn.core.exceptions.InitException;
@@ -13,21 +16,30 @@ import com.google.inject.Singleton;
 @Singleton
 public class DbManager {
 
-    private final Sql2o sql2o;
+
+    private final Connection conn;
+    private final PreparedStatement retrieveWorld;
 
     @Inject
-    public DbManager(DatabaseConnection spec) throws ClassNotFoundException {
+    public DbManager(DatabaseConnection spec) throws ClassNotFoundException, SQLException {
         if (spec == null) throw new InitException("DatabaseConnection is null");
         
         Class.forName(spec.driver());
-        sql2o = new Sql2o(spec.url(), spec.user(), spec.password());
+        conn = DriverManager.getConnection(spec.url(), spec.user(), spec.password());
+        
+        retrieveWorld = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
     }
     
-    public World getWorld(int id) {
-        String sql = "SELECT id, randomNumber FROM World WHERE id = :id";
-        
-        try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql).addParameter("id", id).executeAndFetchFirst(World.class);
+    public synchronized World getWorld(int id) {
+        try {
+            retrieveWorld.setInt(1, id);
+            try (ResultSet set = retrieveWorld.executeQuery()) {
+                if (!set.next()) return null;
+                
+                return new World(set.getInt(1), set.getInt(2));
+            }
+        } catch (SQLException e) {
+            return null;
         }
     }
 }
