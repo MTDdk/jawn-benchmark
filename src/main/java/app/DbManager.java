@@ -30,7 +30,7 @@ public class DbManager {
 //        retrieveWorld = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
     }
     
-    public synchronized World getWorld(int id) {
+    public World getWorld(int id) {
         try {
             PreparedStatement st = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
             
