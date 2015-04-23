@@ -52,11 +52,35 @@ public class DbManager {
         try (ResultSet set = retrieveFortune.executeQuery()) {
             List<Fortune> list = new ArrayList<>();
             while (set.next()) {
-                list.add(new Fortune(set.getInt(1), set.getString(2)));
+                list.add(new Fortune(set.getInt(1), escape(set.getString(2))));
             }
             return list;
         } catch (SQLException e) {
             return null;
         }
+    }
+    
+    private static final String escape(String html) {
+        StringBuilder bob = new StringBuilder();
+        char[] arr = html.toCharArray();
+        for (char c : arr) {
+            switch(c) {
+            case '<':
+                bob.append("&lt;");
+                break;
+            case '>':
+                bob.append("&gt;");
+                break;
+            case '&':
+                bob.append("&amp;");
+                break;
+            case '"':
+                bob.append("&quot;");
+                break;
+            default:
+                bob.append(c);
+            }
+        }
+        return bob.toString();
     }
 }
