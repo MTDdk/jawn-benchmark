@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
 	// Framework
-	compile 'net.javapla.jawn:jawn:0.8.4-SNAPSHOT'
+	compile 'net.javapla.jawn:jawn:0.8.5-SNAPSHOT'
 	//compile project(':jawn')
 
 	// Server
