@@ -5,22 +5,24 @@
       "setup_file": "setup",
       "json_url": "/json",
       "db_url": "/db",
+      "query_url": "/queries?queries=",
       "fortune_url": "/fortunes",
+      "update_url": "/updates?queries=",
       "plaintext_url": "/plaintext",
       "port": 8080,
       "approach": "Realistic",
       "classification": "Fullstack",
       "database": "MySQL",
-      "framework": "jawn",
+      "framework": "java-web-planet",
       "language": "Java",
       "orm": "Raw",
-      "platform": "Jetty",
+      "platform": "Servlet",
       "webserver": "Jetty",
       "os": "Linux",
       "database_os": "Linux",
       "display_name": "jawn-standalone",
       "notes": "",
-      "versus": ""
+      "versus": "servlet"
     }
   }]
 }

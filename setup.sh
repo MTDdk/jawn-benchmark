@@ -3,6 +3,9 @@
 # load java environment variables
 source $IROOT/java8.installed
 
-./gradlew clean build
+# ./gradlew clean build
 
-./gradlew run &
+# ./gradlew run &
+
+cd build/install/jawn-standalone
+./bin/jawn-standalone

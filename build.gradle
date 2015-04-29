@@ -10,17 +10,12 @@ mainClassName = 'app.JettyMain'
 
 repositories {
     mavenCentral()
-    
-    //snapshot repository
-    maven {
-        url 'http://oss.sonatype.org/content/repositories/snapshots'
-    }
 }
 
 dependencies {
 	// Framework
-	compile 'net.javapla.jawn:jawn:0.8.5-SNAPSHOT'
-	//compile project(':jawn')
+	//compile 'net.javapla.jawn:jawn:0.8.5'
+	compile project(':jawn')
 
 	// Server
 	compile 'org.eclipse.jetty:jetty-server:9.2.+'
@@ -28,7 +23,8 @@ dependencies {
 	compile 'org.eclipse.jetty:jetty-webapp:9.2.+'	
  
 	// Database
-	runtime 'mysql:mysql-connector-java:5.1.35'
+	compile 'mysql:mysql-connector-java:5.1.35'
+	compile 'com.mchange:c3p0:0.9.5'
 	
 	//Logging 
 	runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2' exclude group: 'org.slf4j'
