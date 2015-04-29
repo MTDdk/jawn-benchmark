@@ -1,8 +1,8 @@
 package app.config;
 
-import net.javapla.jawn.application.ApplicationDatabaseBootstrap;
-import net.javapla.jawn.core.Modes;
 import net.javapla.jawn.core.db.DatabaseConnections;
+import net.javapla.jawn.core.spi.ApplicationDatabaseBootstrap;
+import net.javapla.jawn.core.util.Modes;
 
 public class Database implements ApplicationDatabaseBootstrap {
 

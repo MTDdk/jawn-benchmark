@@ -1,1 +1,9 @@
-<!DOCTYPE html><html><head><title>$site.title$</title></head><body>$site.content$</body></html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fortunes</title>
+</head>
+<body>
+	$site.content$
+</body>
+</html>

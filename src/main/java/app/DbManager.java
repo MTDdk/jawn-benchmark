@@ -1,44 +1,50 @@
 package app;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.javapla.jawn.core.db.DatabaseConnections.DatabaseConnection;
+import net.javapla.jawn.core.db.DatabaseConnection;
 import net.javapla.jawn.core.exceptions.InitException;
 import app.models.Fortune;
 import app.models.World;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Singleton
 public class DbManager {
 
-
-    private final Connection conn;
-    private final PreparedStatement retrieveWorld;
-    private final PreparedStatement retrieveFortune;
+    private ComboPooledDataSource source;
 
     @Inject
-    public DbManager(DatabaseConnection spec) throws ClassNotFoundException, SQLException {
+    public DbManager(DatabaseConnection spec) throws ClassNotFoundException, SQLException, PropertyVetoException {
         if (spec == null) throw new InitException("DatabaseConnection is null");
         
-        Class.forName(spec.driver());
-        conn = DriverManager.getConnection(spec.url(), spec.user(), spec.password());
+        source = new ComboPooledDataSource();
+        source.setDriverClass(spec.driver());
+        source.setJdbcUrl(spec.url());
+        source.setUser(spec.user());
+        source.setPassword(spec.password());
         
-        retrieveWorld   = conn.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
-        retrieveFortune = conn.prepareStatement("SELECT id, message FROM Fortune");
+        source.setMaxPoolSize(100);
+        source.setMinPoolSize(0);
+        source.setAcquireIncrement(1);
+        source.setIdleConnectionTestPeriod(300);
+        source.setMaxStatements(0);
+        
     }
     
-    public synchronized World getWorld(int id) {
-        try {
-            retrieveWorld.setInt(1, id);
-            try (ResultSet set = retrieveWorld.executeQuery()) {
+    public World getWorld(int id) {
+        try (Connection connection = source.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT id, randomNumber FROM World WHERE id = ?");
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
                 if (!set.next()) return null;
                 
                 return new World(set.getInt(1), set.getInt(2));
@@ -48,16 +54,31 @@ public class DbManager {
         }
     }
     
+    public boolean updateWorlds(World[] worlds) {
+        try (Connection connection = source.getConnection()) {
+            PreparedStatement update = connection.prepareStatement("UPDATE World SET randomNumber = ? WHERE id= ?");
+            for (World world : worlds) {
+                update.setInt(1, world.randomNumber);
+                update.setInt(2, world.id);
+                update.addBatch();
+            }
+            update.executeBatch();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
     public List<Fortune> fetchAllFortunes() {
-        try (ResultSet set = retrieveFortune.executeQuery()) {
-            List<Fortune> list = new ArrayList<>();
+        List<Fortune> list = new ArrayList<>();
+        try (Connection connection = source.getConnection()) {
+            PreparedStatement fetch = connection.prepareStatement("SELECT id, message FROM Fortune");
+            ResultSet set = fetch.executeQuery();
             while (set.next()) {
                 list.add(new Fortune(set.getInt(1), escape(set.getString(2))));
             }
-            return list;
-        } catch (SQLException e) {
-            return null;
-        }
+        } catch (SQLException ignore) { }
+        return list;
     }
     
     private static final String escape(String html) {

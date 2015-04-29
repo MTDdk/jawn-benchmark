@@ -1,7 +1,7 @@
 package app.controllers;
 
-import app.models.Message;
 import net.javapla.jawn.core.AppController;
+import app.models.Message;
 
 public class IndexController extends AppController {
 

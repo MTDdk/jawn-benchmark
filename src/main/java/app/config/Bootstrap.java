@@ -1,13 +1,13 @@
 package app.config;
 
+import net.javapla.jawn.core.ApplicationConfig;
+import net.javapla.jawn.core.spi.ApplicationBootstrap;
 import app.DbModule;
-import net.javapla.jawn.application.ApplicationBootstrap;
-import net.javapla.jawn.core.ConfigApp;
 
 public class Bootstrap implements ApplicationBootstrap {
 
     @Override
-    public void bootstrap(ConfigApp config) {
+    public void bootstrap(ApplicationConfig config) {
         config.registerModules(new DbModule());
     }
 

@@ -8,7 +8,7 @@
 
     
     <!-- Disables all logging -->
-    <root level="OFF">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
     
